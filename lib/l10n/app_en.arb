@@ -1,0 +1,56 @@
+{
+  "@@locale": "en",
+  "appTitle": "SyncOps",
+  
+  "loginTitle": "Login",
+  "emailHint": "Email",
+  "passwordHint": "Password",
+  "loginButton": "Login",
+  "forgotPassword": "Forgot Password?",
+  "dontHaveAccount": "Don't have an account?",
+  "loginSubtitle": "Please enter your email and password",
+
+  
+  "dashboardTitle": "Dashboard",
+  "mesTitle": "Manufacturing",
+  "wmsTitle": "Warehouse",
+  "erpTitle": "Finance & HR",
+  "crmTitle": "Customers",
+  "feedbackTitle": "Feedback",
+  
+  "todayProduction": "Today's Production",
+  "inventoryStatus": "Inventory Status",
+  "salesOverview": "Sales Overview",
+  "recentOrders": "Recent Orders",
+  "customerSatisfaction": "Customer Satisfaction",
+  
+  "viewAll": "View All",
+  "seeMore": "See More",
+  "settings": "Settings",
+  "profile": "Profile",
+  "logout": "Logout",
+  
+  "errorNoInternet": "No internet connection",
+  "errorServerConnection": "Server connection error",
+  "errorInvalidCredentials": "Invalid email or password",
+  "errorGeneric": "Something went wrong. Please try again.",
+
+  "register": "Register",
+  "createAccount": "Create Account",
+  "registerSubtitle": "Please fill in the form to create your account",
+  "fullName": "Full Name",
+  "fullNameHint": "Enter your full name",
+  "fullNameRequired": "Full name is required",
+  "email": "Email",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Please enter a valid email",
+  "password": "Password",
+  "passwordRequired": "Password is required",
+  "passwordTooShort": "Password must be at least 6 characters",
+  "confirmPassword": "Confirm Password",
+  "confirmPasswordHint": "Re-enter your password",
+  "confirmPasswordRequired": "Please confirm your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "alreadyHaveAccount": "Already have an account?",
+  "login": "Login"
+}
