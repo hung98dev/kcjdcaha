@@ -7,8 +7,7 @@ SyncOps là một ứng dụng quản lý doanh nghiệp toàn diện, tích h�
 ## Chức năng chính
 
 1. **Dashboard Tổng Quan**
-   - Hiển thị biểu đồ, số liệu theo thời gian thực về sản xuất, kho, bán hàng, tài chính
-   - Tùy chỉnh giao diện để hiển thị thông tin quan trọng nhất
+   - Hiển thị danh sách Module có quyền sử dụng
 
 2. **Quản lý sản xuất (MES)**
    - Theo dõi tiến độ sản xuất theo từng công đoạn
