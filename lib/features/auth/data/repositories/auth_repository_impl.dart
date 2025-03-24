@@ -145,9 +145,42 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> isLoggedIn() async {
     try {
       final user = await localDataSource.getLastUser();
-      return user != null;
+      if (user == null) {
+        return false;
+      }
+      // Kiểm tra token có hợp lệ không
+      return await isTokenValid();
     } catch (e) {
       return false;
+    }
+  }
+
+  @override
+  Future<bool> isTokenValid() async {
+    return await localDataSource.isTokenValid();
+  }
+
+  @override
+  Future<Either<Failure, User>> refreshToken() async {
+    try {
+      final user = await localDataSource.getLastUser();
+      if (user == null || user.token == null) {
+        return Left(InvalidCredentialsFailure());
+      }
+
+      if (await networkInfo.isConnected) {
+        try {
+          final userModel = await remoteDataSource.refreshToken(user.token!);
+          await localDataSource.cacheUser(userModel);
+          return Right(userModel.toEntity());
+        } catch (e) {
+          return Left(ServerFailure());
+        }
+      } else {
+        return Left(NetworkFailure());
+      }
+    } catch (e) {
+      return Left(CacheFailure());
     }
   }
 

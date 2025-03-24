@@ -5,8 +5,10 @@ import 'package:injectable/injectable.dart'; // Package hỗ trợ dependency in
 import 'package:sync_ops/features/auth/domain/entities/user.dart'; // Entity User
 import 'package:sync_ops/features/auth/domain/usecases/get_current_user_usecase.dart'; // UseCase lấy thông tin user hiện tại
 import 'package:sync_ops/features/auth/domain/usecases/is_logged_in_usecase.dart'; // UseCase kiểm tra trạng thái đăng nhập
+import 'package:sync_ops/features/auth/domain/usecases/is_token_valid_usecase.dart'; // UseCase kiểm tra tính hợp lệ của token
 import 'package:sync_ops/features/auth/domain/usecases/login_usecase.dart'; // UseCase xử lý đăng nhập
 import 'package:sync_ops/features/auth/domain/usecases/logout_usecase.dart'; // UseCase xử lý đăng xuất
+import 'package:sync_ops/features/auth/domain/usecases/refresh_token_usecase.dart'; // UseCase làm mới token
 import 'package:sync_ops/features/auth/domain/usecases/register_usecase.dart'; // UseCase xử lý đăng ký
 
 // File được tạo tự động bởi freezed
@@ -23,6 +25,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LogoutUseCase _logoutUseCase;
   final GetCurrentUserUseCase _getCurrentUserUseCase;
   final IsLoggedInUseCase _isLoggedInUseCase;
+  final IsTokenValidUseCase _isTokenValidUseCase;
+  final RefreshTokenUseCase _refreshTokenUseCase;
 
   // Constructor nhận các UseCase thông qua dependency injection
   AuthBloc(
@@ -31,6 +35,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._logoutUseCase,
     this._getCurrentUserUseCase,
     this._isLoggedInUseCase,
+    this._isTokenValidUseCase,
+    this._refreshTokenUseCase,
   ) : super(const AuthState.initial()) {
     // Khởi tạo với trạng thái ban đầu
     // Đăng ký các handler cho các sự kiện
@@ -38,6 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<_LoginRequested>(_onLoginRequested); // Xử lý yêu cầu đăng nhập
     on<_RegisterRequested>(_onRegisterRequested); // Xử lý yêu cầu đăng ký
     on<_LogoutRequested>(_onLogoutRequested); // Xử lý yêu cầu đăng xuất
+    on<_RefreshTokenRequested>(
+      _onRefreshTokenRequested,
+    ); // Xử lý yêu cầu làm mới token
   }
 
   Future<void> _onCheckAuthStatus(
@@ -45,16 +54,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthState.loading());
-    final isLoggedIn = await _isLoggedInUseCase();
+    final isTokenValid = await _isTokenValidUseCase();
 
-    if (isLoggedIn) {
+    if (isTokenValid) {
+      // Nếu token hợp lệ, lấy thông tin người dùng hiện tại
       final userResult = await _getCurrentUserUseCase();
       userResult.fold(
         (failure) => emit(const AuthState.unauthenticated()),
         (user) => emit(AuthState.authenticated(user!)),
       );
     } else {
-      emit(const AuthState.unauthenticated());
+      // Nếu token không hợp lệ, thử làm mới token
+      final refreshResult = await _refreshTokenUseCase();
+      refreshResult.fold(
+        (failure) {
+          // Nếu làm mới token thất bại, chuyển về trạng thái chưa xác thực
+          emit(const AuthState.unauthenticated());
+        },
+        (user) {
+          // Nếu làm mới token thành công, chuyển về trạng thái đã xác thực
+          emit(AuthState.authenticated(user));
+        },
+      );
     }
   }
 
@@ -95,6 +116,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthState.error(failure.toString())),
       (_) => emit(const AuthState.unauthenticated()),
+    );
+  }
+
+  Future<void> _onRefreshTokenRequested(
+    _RefreshTokenRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(const AuthState.loading());
+    final result = await _refreshTokenUseCase();
+    result.fold(
+      (failure) => emit(const AuthState.unauthenticated()),
+      (user) => emit(AuthState.authenticated(user)),
     );
   }
 }

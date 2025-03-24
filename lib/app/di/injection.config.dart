@@ -9,54 +9,98 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:get_it/get_it.dart' as _i174;
+import 'package:http/http.dart' as _i519;
+import 'package:injectable/injectable.dart' as _i526;
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart'
+    as _i161;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
-// Import các package cần thiết
-import 'package:get_it/get_it.dart' as _i174; // Package GetIt để quản lý dependency injection
-import 'package:http/http.dart' as _i519; // Package http để thực hiện các HTTP request
-import 'package:injectable/injectable.dart' as _i526; // Package injectable để tự động tạo dependency injection
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart' as _i161; // Package kiểm tra kết nối internet
-import 'package:shared_preferences/shared_preferences.dart' as _i460; // Package lưu trữ local data
+import '../../core/network/api_client.dart' as _i1059;
+import '../../core/network/network_info.dart' as _i892;
+import '../../features/auth/data/datasources/auth_local_data_source.dart'
+    as _i852;
+import '../../features/auth/data/datasources/auth_remote_data_source.dart'
+    as _i107;
+import '../../features/auth/data/repositories/auth_repository_impl.dart'
+    as _i153;
+import '../../features/auth/domain/repositories/auth_repository.dart' as _i787;
+import '../../features/auth/domain/usecases/get_current_user_usecase.dart'
+    as _i17;
+import '../../features/auth/domain/usecases/is_logged_in_usecase.dart' as _i48;
+import '../../features/auth/domain/usecases/is_token_valid_usecase.dart'
+    as _i955;
+import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
+import '../../features/auth/domain/usecases/logout_usecase.dart' as _i48;
+import '../../features/auth/domain/usecases/refresh_token_usecase.dart'
+    as _i157;
+import '../../features/auth/domain/usecases/register_usecase.dart' as _i941;
+import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/mes/data/datasources/production_order_remote_data_source.dart'
+    as _i224;
+import '../../features/mes/data/datasources/quality_control_order_remote_data_source.dart'
+    as _i180;
+import '../../features/mes/data/repositories/production_order_repository_impl.dart'
+    as _i1031;
+import '../../features/mes/data/repositories/quality_control_order_repository_impl.dart'
+    as _i544;
+import '../../features/mes/domain/repositories/production_order_repository.dart'
+    as _i537;
+import '../../features/mes/domain/repositories/quality_control_order_repository.dart'
+    as _i1046;
+import '../../features/mes/domain/usecases/get_production_orders_usecase.dart'
+    as _i402;
+import '../../features/mes/domain/usecases/get_quality_control_orders_usecase.dart'
+    as _i834;
+import '../../features/mes/domain/usecases/search_production_orders_usecase.dart'
+    as _i530;
+import '../../features/mes/presentation/bloc/production_order/production_order_bloc.dart'
+    as _i150;
+import '../../features/mes/presentation/bloc/quality_control_order/quality_control_order_bloc.dart'
+    as _i366;
+import '../routes/app_router.dart' as _i629;
 
-// Import các module trong ứng dụng
-import '../../core/network/network_info.dart' as _i892; // Module kiểm tra trạng thái mạng
-import '../../features/auth/data/datasources/auth_local_data_source.dart' as _i852; // Data source local cho authentication
-import '../../features/auth/data/datasources/auth_remote_data_source.dart' as _i107; // Data source remote cho authentication
-import '../../features/auth/data/repositories/auth_repository_impl.dart' as _i153; // Implementation của auth repository
-import '../../features/auth/domain/repositories/auth_repository.dart' as _i787; // Interface của auth repository
-import '../../features/auth/domain/usecases/get_current_user_usecase.dart' as _i17; // Use case lấy thông tin user hiện tại
-import '../../features/auth/domain/usecases/is_logged_in_usecase.dart' as _i48; // Use case kiểm tra trạng thái đăng nhập
-import '../../features/auth/domain/usecases/login_usecase.dart' as _i188; // Use case xử lý đăng nhập
-import '../../features/auth/domain/usecases/logout_usecase.dart' as _i48; // Use case xử lý đăng xuất
-import '../../features/auth/domain/usecases/register_usecase.dart' as _i941; // Use case xử lý đăng ký
-import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797; // Bloc quản lý state cho authentication
-import '../routes/app_router.dart' as _i629; // Router quản lý navigation
-
-// Hàm khởi tạo và đăng ký các dependencies vào GetIt container
+// initializes the registration of main-scope dependencies inside of GetIt
 _i174.GetIt init(
   _i174.GetIt getIt, {
   String? environment,
   _i526.EnvironmentFilter? environmentFilter,
 }) {
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
-
-  // Đăng ký AuthRemoteDataSource - xử lý các request authentication với server
-  gh.factory<_i107.AuthRemoteDataSource>(
-    () => _i107.AuthRemoteDataSourceImpl(client: gh<_i519.Client>()),
-  );
-
-  // Đăng ký NetworkInfo - kiểm tra trạng thái kết nối mạng
   gh.factory<_i892.NetworkInfo>(
     () => _i892.NetworkInfoImpl(gh<_i161.InternetConnection>()),
   );
-
-  // Đăng ký AuthLocalDataSource - xử lý lưu trữ dữ liệu authentication local
   gh.factory<_i852.AuthLocalDataSource>(
     () => _i852.AuthLocalDataSourceImpl(
       sharedPreferences: gh<_i460.SharedPreferences>(),
     ),
   );
-
-  // Đăng ký AuthRepository - quản lý business logic cho authentication
+  gh.lazySingleton<_i1059.ApiClient>(
+    () => _i1059.ApiClient(gh<_i519.Client>()),
+  );
+  gh.lazySingleton<_i180.QualityControlOrderRemoteDataSource>(
+    () => _i180.QualityControlOrderRemoteDataSourceImpl(
+      gh<_i1059.ApiClient>(),
+      client: gh<_i1059.ApiClient>(),
+    ),
+  );
+  gh.factory<_i107.AuthRemoteDataSource>(
+    () => _i107.AuthRemoteDataSourceImpl(
+      client: gh<_i519.Client>(),
+      localDataSource: gh<_i852.AuthLocalDataSource>(),
+    ),
+  );
+  gh.lazySingleton<_i224.ProductionOrderRemoteDataSource>(
+    () => _i224.ProductionOrderRemoteDataSourceImpl(
+      client: gh<_i1059.ApiClient>(),
+    ),
+  );
+  gh.lazySingleton<_i537.ProductionOrderRepository>(
+    () => _i1031.ProductionOrderRepositoryImpl(
+      remoteDataSource: gh<_i224.ProductionOrderRemoteDataSource>(),
+      networkInfo: gh<_i892.NetworkInfo>(),
+    ),
+  );
   gh.factory<_i787.AuthRepository>(
     () => _i153.AuthRepositoryImpl(
       remoteDataSource: gh<_i107.AuthRemoteDataSource>(),
@@ -64,29 +108,59 @@ _i174.GetIt init(
       networkInfo: gh<_i892.NetworkInfo>(),
     ),
   );
-
-  // Đăng ký các use cases cho authentication
+  gh.lazySingleton<_i1046.QualityControlOrderRepository>(
+    () => _i544.QualityControlOrderRepositoryImpl(
+      remoteDataSource: gh<_i180.QualityControlOrderRemoteDataSource>(),
+      networkInfo: gh<_i892.NetworkInfo>(),
+    ),
+  );
   gh.factory<_i17.GetCurrentUserUseCase>(
     () => _i17.GetCurrentUserUseCase(gh<_i787.AuthRepository>()),
   );
-
   gh.factory<_i48.IsLoggedInUseCase>(
     () => _i48.IsLoggedInUseCase(gh<_i787.AuthRepository>()),
   );
-
   gh.factory<_i188.LoginUseCase>(
     () => _i188.LoginUseCase(gh<_i787.AuthRepository>()),
   );
-
   gh.factory<_i48.LogoutUseCase>(
     () => _i48.LogoutUseCase(gh<_i787.AuthRepository>()),
   );
-
   gh.factory<_i941.RegisterUseCase>(
     () => _i941.RegisterUseCase(gh<_i787.AuthRepository>()),
   );
-
-  // Đăng ký AuthBloc - quản lý state cho authentication
+  gh.factory<_i955.IsTokenValidUseCase>(
+    () => _i955.IsTokenValidUseCase(gh<_i787.AuthRepository>()),
+  );
+  gh.factory<_i157.RefreshTokenUseCase>(
+    () => _i157.RefreshTokenUseCase(gh<_i787.AuthRepository>()),
+  );
+  gh.factory<_i834.GetQualityControlOrdersUseCase>(
+    () => _i834.GetQualityControlOrdersUseCase(
+      gh<_i1046.QualityControlOrderRepository>(),
+    ),
+  );
+  gh.factory<_i402.GetProductionOrdersUseCase>(
+    () =>
+        _i402.GetProductionOrdersUseCase(gh<_i537.ProductionOrderRepository>()),
+  );
+  gh.factory<_i530.SearchProductionOrdersUseCase>(
+    () => _i530.SearchProductionOrdersUseCase(
+      gh<_i537.ProductionOrderRepository>(),
+    ),
+  );
+  gh.factory<_i629.AppRouter>(
+    () => _i629.AppRouter(
+      gh<_i48.IsLoggedInUseCase>(),
+      gh<_i955.IsTokenValidUseCase>(),
+    ),
+  );
+  gh.factory<_i150.ProductionOrderBloc>(
+    () => _i150.ProductionOrderBloc(
+      gh<_i402.GetProductionOrdersUseCase>(),
+      gh<_i530.SearchProductionOrdersUseCase>(),
+    ),
+  );
   gh.factory<_i797.AuthBloc>(
     () => _i797.AuthBloc(
       gh<_i188.LoginUseCase>(),
@@ -94,13 +168,14 @@ _i174.GetIt init(
       gh<_i48.LogoutUseCase>(),
       gh<_i17.GetCurrentUserUseCase>(),
       gh<_i48.IsLoggedInUseCase>(),
+      gh<_i955.IsTokenValidUseCase>(),
+      gh<_i157.RefreshTokenUseCase>(),
     ),
   );
-
-  // Đăng ký AppRouter - quản lý navigation dựa trên trạng thái đăng nhập
-  gh.factory<_i629.AppRouter>(
-    () => _i629.AppRouter(gh<_i48.IsLoggedInUseCase>()),
+  gh.factory<_i366.QualityControlOrderBloc>(
+    () => _i366.QualityControlOrderBloc(
+      gh<_i834.GetQualityControlOrdersUseCase>(),
+    ),
   );
-
   return getIt;
 }

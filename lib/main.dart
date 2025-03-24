@@ -1,5 +1,5 @@
 // Import các package cần thiết cho ứng dụng
-import 'package:flutter/material.dart'; // Package chính của Flutter
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Package quản lý state với BLoC pattern
 import 'package:flutter_localizations/flutter_localizations.dart'; // Package hỗ trợ đa ngôn ngữ
 import 'package:get_it/get_it.dart'; // Package dependency injection

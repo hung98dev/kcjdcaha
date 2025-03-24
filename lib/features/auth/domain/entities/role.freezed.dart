@@ -15,7 +15,10 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Role {
 
- String get id; String get name; String get description; List<String> get permissions;
+ String get id;// ID duy nhất của vai trò
+ String get name;// Tên vai trò (ví dụ: Admin, User)
+ String get description;// Mô tả chi tiết về vai trò
+ List<String> get permissions;
 /// Create a copy of Role
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -84,9 +87,13 @@ class _Role extends Role {
   
 
 @override final  String id;
+// ID duy nhất của vai trò
 @override final  String name;
+// Tên vai trò (ví dụ: Admin, User)
 @override final  String description;
+// Mô tả chi tiết về vai trò
  final  List<String> _permissions;
+// Mô tả chi tiết về vai trò
 @override List<String> get permissions {
   if (_permissions is EqualUnmodifiableListView) return _permissions;
   // ignore: implicit_dynamic_type

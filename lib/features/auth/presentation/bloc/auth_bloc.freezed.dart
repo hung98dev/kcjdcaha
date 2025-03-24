@@ -245,6 +245,38 @@ String toString() {
 
 
 /// @nodoc
+
+
+class _RefreshTokenRequested implements AuthEvent {
+  const _RefreshTokenRequested();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RefreshTokenRequested);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthEvent.refreshTokenRequested()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
 mixin _$AuthState {
 
 

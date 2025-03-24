@@ -16,4 +16,6 @@ class AuthEvent with _$AuthEvent {
   }) = _RegisterRequested;
 
   const factory AuthEvent.logoutRequested() = _LogoutRequested;
+
+  const factory AuthEvent.refreshTokenRequested() = _RefreshTokenRequested;
 }

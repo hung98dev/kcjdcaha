@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+// Import các package cần thiết
+import 'package:flutter/material.dart'; // Package chính của Flutter
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart'; // Package điều hướng
 import 'package:sync_ops/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:sync_ops/features/dashboard/presentation/widgets/feature_card.dart';
+import 'package:sync_ops/features/dashboard/presentation/widgets/feature_card.dart'; // Widget card tính năng
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -41,12 +42,14 @@ class DashboardPage extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 'Chào mừng đến với SyncOps',
-                style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Text(
                 'Hệ thống quản lý doanh nghiệp toàn diện',
-                style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               GridView.builder(
@@ -76,7 +79,7 @@ class DashboardPage extends StatelessWidget {
                     case 2:
                       return FeatureCard.mes(
                         onTap: () {
-                          // TODO: Navigate to MES module
+                          context.go('/mes');
                         },
                       );
                     case 3:

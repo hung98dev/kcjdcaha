@@ -9,7 +9,9 @@
   "forgotPassword": "Forgot Password?",
   "dontHaveAccount": "Don't have an account?",
   "loginSubtitle": "Please enter your email and password",
-
+  "emailEmpty": "Email is required",
+  "passwordEmpty": "Password is required",
+  "noAccount": "Don't have an account? Register",
   
   "dashboardTitle": "Dashboard",
   "mesTitle": "Manufacturing",

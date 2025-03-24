@@ -11,8 +11,8 @@ class NetworkException implements Exception {}
 
 // Lớp cơ sở cho các exception liên quan đến xác thực
 class AuthException implements Exception {
-  final String message;    // Thuộc tính lưu thông báo lỗi
-  AuthException(this.message);    // Constructor nhận thông báo lỗi
+  final String message; // Thuộc tính lưu thông báo lỗi
+  AuthException(this.message); // Constructor nhận thông báo lỗi
 }
 
 // Exception cho trường hợp thông tin đăng nhập không hợp lệ
@@ -34,3 +34,6 @@ class UserNotFoundException extends AuthException {
 class UserDisabledException extends AuthException {
   UserDisabledException() : super('Tài khoản đã bị vô hiệu hóa');
 }
+
+// Exception cho trường hợp không tìm thấy dữ liệu
+class NotFoundException implements Exception {}

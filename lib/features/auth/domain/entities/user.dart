@@ -17,5 +17,7 @@ abstract class User with _$User {
     required bool isActive, // Trạng thái hoạt động của user
     required DateTime createdAt, // Thời điểm tạo tài khoản
     DateTime? lastLogin, // Thời điểm đăng nhập cuối cùng, có thể null
+    String? token, // Token xác thực, có thể null
+    DateTime? tokenExpiry, // Thời điểm hết hạn của token, có thể null
   }) = _User;
 }

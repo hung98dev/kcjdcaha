@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserModel {
 
- String get id; String get email; String get fullName; String? get photoUrl; List<String> get roles; bool get isActive; DateTime get createdAt; DateTime? get lastLogin;
+ String get id; String get email; String get fullName; String? get photoUrl; List<String> get roles; bool get isActive; DateTime get createdAt; DateTime? get lastLogin; String? get token; DateTime? get tokenExpiry;
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserModelCopyWith<UserModel> get copyWith => _$UserModelCopyWithImpl<UserModel>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other.roles, roles)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other.roles, roles)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin)&&(identical(other.token, token) || other.token == token)&&(identical(other.tokenExpiry, tokenExpiry) || other.tokenExpiry == tokenExpiry));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,fullName,photoUrl,const DeepCollectionEquality().hash(roles),isActive,createdAt,lastLogin);
+int get hashCode => Object.hash(runtimeType,id,email,fullName,photoUrl,const DeepCollectionEquality().hash(roles),isActive,createdAt,lastLogin,token,tokenExpiry);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, email: $email, fullName: $fullName, photoUrl: $photoUrl, roles: $roles, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin)';
+  return 'UserModel(id: $id, email: $email, fullName: $fullName, photoUrl: $photoUrl, roles: $roles, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin, token: $token, tokenExpiry: $tokenExpiry)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserModelCopyWith<$Res>  {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) _then) = _$UserModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String email, String fullName, String? photoUrl, List<String> roles, bool isActive, DateTime createdAt, DateTime? lastLogin
+ String id, String email, String fullName, String? photoUrl, List<String> roles, bool isActive, DateTime createdAt, DateTime? lastLogin, String? token, DateTime? tokenExpiry
 });
 
 
@@ -66,7 +66,7 @@ class _$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? email = null,Object? fullName = null,Object? photoUrl = freezed,Object? roles = null,Object? isActive = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? email = null,Object? fullName = null,Object? photoUrl = freezed,Object? roles = null,Object? isActive = null,Object? createdAt = null,Object? lastLogin = freezed,Object? token = freezed,Object? tokenExpiry = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -76,6 +76,8 @@ as String?,roles: null == roles ? _self.roles : roles // ignore: cast_nullable_t
 as List<String>,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastLogin: freezed == lastLogin ? _self.lastLogin : lastLogin // ignore: cast_nullable_to_non_nullable
+as DateTime?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String?,tokenExpiry: freezed == tokenExpiry ? _self.tokenExpiry : tokenExpiry // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }
@@ -87,7 +89,7 @@ as DateTime?,
 @JsonSerializable()
 
 class _UserModel extends UserModel {
-  const _UserModel({required this.id, required this.email, required this.fullName, this.photoUrl, required final  List<String> roles, required this.isActive, required this.createdAt, this.lastLogin}): _roles = roles,super._();
+  const _UserModel({required this.id, required this.email, required this.fullName, this.photoUrl, required final  List<String> roles, required this.isActive, required this.createdAt, this.lastLogin, this.token, this.tokenExpiry}): _roles = roles,super._();
   factory _UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 
 @override final  String id;
@@ -104,6 +106,8 @@ class _UserModel extends UserModel {
 @override final  bool isActive;
 @override final  DateTime createdAt;
 @override final  DateTime? lastLogin;
+@override final  String? token;
+@override final  DateTime? tokenExpiry;
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
@@ -118,16 +122,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other._roles, _roles)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserModel&&(identical(other.id, id) || other.id == id)&&(identical(other.email, email) || other.email == email)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.photoUrl, photoUrl) || other.photoUrl == photoUrl)&&const DeepCollectionEquality().equals(other._roles, _roles)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.lastLogin, lastLogin) || other.lastLogin == lastLogin)&&(identical(other.token, token) || other.token == token)&&(identical(other.tokenExpiry, tokenExpiry) || other.tokenExpiry == tokenExpiry));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,email,fullName,photoUrl,const DeepCollectionEquality().hash(_roles),isActive,createdAt,lastLogin);
+int get hashCode => Object.hash(runtimeType,id,email,fullName,photoUrl,const DeepCollectionEquality().hash(_roles),isActive,createdAt,lastLogin,token,tokenExpiry);
 
 @override
 String toString() {
-  return 'UserModel(id: $id, email: $email, fullName: $fullName, photoUrl: $photoUrl, roles: $roles, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin)';
+  return 'UserModel(id: $id, email: $email, fullName: $fullName, photoUrl: $photoUrl, roles: $roles, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin, token: $token, tokenExpiry: $tokenExpiry)';
 }
 
 
@@ -138,7 +142,7 @@ abstract mixin class _$UserModelCopyWith<$Res> implements $UserModelCopyWith<$Re
   factory _$UserModelCopyWith(_UserModel value, $Res Function(_UserModel) _then) = __$UserModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String email, String fullName, String? photoUrl, List<String> roles, bool isActive, DateTime createdAt, DateTime? lastLogin
+ String id, String email, String fullName, String? photoUrl, List<String> roles, bool isActive, DateTime createdAt, DateTime? lastLogin, String? token, DateTime? tokenExpiry
 });
 
 
@@ -155,7 +159,7 @@ class __$UserModelCopyWithImpl<$Res>
 
 /// Create a copy of UserModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? email = null,Object? fullName = null,Object? photoUrl = freezed,Object? roles = null,Object? isActive = null,Object? createdAt = null,Object? lastLogin = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? email = null,Object? fullName = null,Object? photoUrl = freezed,Object? roles = null,Object? isActive = null,Object? createdAt = null,Object? lastLogin = freezed,Object? token = freezed,Object? tokenExpiry = freezed,}) {
   return _then(_UserModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -165,6 +169,8 @@ as String?,roles: null == roles ? _self._roles : roles // ignore: cast_nullable_
 as List<String>,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,lastLogin: freezed == lastLogin ? _self.lastLogin : lastLogin // ignore: cast_nullable_to_non_nullable
+as DateTime?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String?,tokenExpiry: freezed == tokenExpiry ? _self.tokenExpiry : tokenExpiry // ignore: cast_nullable_to_non_nullable
 as DateTime?,
   ));
 }

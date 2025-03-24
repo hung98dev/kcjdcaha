@@ -9,6 +9,9 @@
   "forgotPassword": "Quên mật khẩu?",
   "dontHaveAccount": "Chưa có tài khoản?",
   "loginSubtitle": "Vui lòng điền thông tin để đăng nhập",
+  "emailEmpty": "Vui lòng nhập email",
+  "passwordEmpty": "Vui lòng nhập mật khẩu",
+  "noAccount": "Tạo tài khoản mới",
 
   "dashboardTitle": "Tổng quan",
   "mesTitle": "Sản xuất",

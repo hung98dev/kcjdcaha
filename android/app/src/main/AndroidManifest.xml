@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Quyền truy cập camera cho quét mã QR/barcode -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:label="sync_ops"
         android:name="${applicationName}"

@@ -17,6 +17,8 @@ abstract class UserModel with _$UserModel {
     required bool isActive,
     required DateTime createdAt,
     DateTime? lastLogin,
+    String? token,
+    DateTime? tokenExpiry,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +33,8 @@ abstract class UserModel with _$UserModel {
     isActive: user.isActive,
     createdAt: user.createdAt,
     lastLogin: user.lastLogin,
+    token: user.token,
+    tokenExpiry: user.tokenExpiry,
   );
 
   User toEntity() => User(
@@ -42,5 +46,7 @@ abstract class UserModel with _$UserModel {
     isActive: isActive,
     createdAt: createdAt,
     lastLogin: lastLogin,
+    token: token,
+    tokenExpiry: tokenExpiry,
   );
 }

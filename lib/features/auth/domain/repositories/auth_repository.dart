@@ -22,6 +22,12 @@ abstract class AuthRepository {
   /// Kiểm tra trạng thái đăng nhập
   Future<bool> isLoggedIn();
 
+  /// Kiểm tra token có hợp lệ không
+  Future<bool> isTokenValid();
+
+  /// Làm mới token
+  Future<Either<Failure, User>> refreshToken();
+
   /// Quên mật khẩu
   Future<Either<Failure, void>> forgotPassword(String email);
 
