@@ -34,6 +34,8 @@ import '../../features/auth/domain/usecases/login_usecase.dart' as _i188;
 import '../../features/auth/domain/usecases/logout_usecase.dart' as _i48;
 import '../../features/auth/domain/usecases/refresh_token_usecase.dart'
     as _i157;
+import '../../features/auth/domain/usecases/refresh_user_permissions_usecase.dart'
+    as _i303;
 import '../../features/auth/domain/usecases/register_usecase.dart' as _i941;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
 import '../../features/mes/data/datasources/production_order_remote_data_source.dart'
@@ -135,6 +137,9 @@ _i174.GetIt init(
   gh.factory<_i157.RefreshTokenUseCase>(
     () => _i157.RefreshTokenUseCase(gh<_i787.AuthRepository>()),
   );
+  gh.factory<_i303.RefreshUserPermissionsUseCase>(
+    () => _i303.RefreshUserPermissionsUseCase(gh<_i787.AuthRepository>()),
+  );
   gh.factory<_i834.GetQualityControlOrdersUseCase>(
     () => _i834.GetQualityControlOrdersUseCase(
       gh<_i1046.QualityControlOrderRepository>(),
@@ -150,10 +155,7 @@ _i174.GetIt init(
     ),
   );
   gh.factory<_i629.AppRouter>(
-    () => _i629.AppRouter(
-      gh<_i48.IsLoggedInUseCase>(),
-      gh<_i955.IsTokenValidUseCase>(),
-    ),
+    () => _i629.AppRouter(gh<_i955.IsTokenValidUseCase>()),
   );
   gh.factory<_i150.ProductionOrderBloc>(
     () => _i150.ProductionOrderBloc(
@@ -161,13 +163,12 @@ _i174.GetIt init(
       gh<_i530.SearchProductionOrdersUseCase>(),
     ),
   );
-  gh.factory<_i797.AuthBloc>(
+  gh.singleton<_i797.AuthBloc>(
     () => _i797.AuthBloc(
       gh<_i188.LoginUseCase>(),
       gh<_i941.RegisterUseCase>(),
       gh<_i48.LogoutUseCase>(),
       gh<_i17.GetCurrentUserUseCase>(),
-      gh<_i48.IsLoggedInUseCase>(),
       gh<_i955.IsTokenValidUseCase>(),
       gh<_i157.RefreshTokenUseCase>(),
     ),

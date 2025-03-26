@@ -20,6 +20,10 @@ void main() async {
   // Khởi tạo dependency injection
   await configureDependencies();
 
+  // Khởi tạo AuthBloc và kiểm tra trạng thái xác thực
+  final authBloc = getIt<AuthBloc>();
+  authBloc.add(const AuthEvent.checkAuthStatus());
+
   // Chạy ứng dụng với widget gốc là MyApp
   runApp(const MyApp());
 }
@@ -32,10 +36,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Lấy instance của AppRouter từ dependency injection
     final appRouter = getIt<AppRouter>();
+    final authBloc = getIt<AuthBloc>();
 
-    // Bọc ứng dụng trong BlocProvider để cung cấp AuthBloc cho toàn bộ ứng dụng
-    return BlocProvider(
-      create: (context) => getIt<AuthBloc>(),
+    // Bọc ứng dụng trong BlocProvider.value để cung cấp AuthBloc cho toàn bộ ứng dụng
+    return BlocProvider.value(
+      value: authBloc,
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'SyncOps', // Tiêu đề của ứng dụng

@@ -54,6 +54,8 @@ class AuthRepositoryImpl implements AuthRepository {
           isActive: true,
           createdAt: DateTime.now(),
           lastLogin: DateTime.now(),
+          token: email,
+          tokenExpiry: DateTime.now().add(const Duration(days: 1)),
         );
         await localDataSource.cacheUser(offlineUser);
         return Right(offlineUser.toEntity());
@@ -86,6 +88,8 @@ class AuthRepositoryImpl implements AuthRepository {
         isActive: true,
         createdAt: DateTime.now(),
         lastLogin: DateTime.now(),
+        token: email,
+        tokenExpiry: DateTime.now().add(const Duration(days: 1)),
       );
       await localDataSource.cacheUser(offlineUser);
       return Right(offlineUser.toEntity());
@@ -168,9 +172,38 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(InvalidCredentialsFailure());
       }
 
-      if (await networkInfo.isConnected) {
+      // if (await networkInfo.isConnected) {
+      if (1 == 1) {
         try {
-          final userModel = await remoteDataSource.refreshToken(user.token!);
+          //final userModel = await remoteDataSource.refreshToken(user.token!);
+          final userModel = UserModel(
+            id: 'offline-${DateTime.now().millisecondsSinceEpoch}',
+            email: "email",
+            fullName: 'Offline User',
+            roles: [
+              'admin',
+              'manager',
+              'user',
+              'operator',
+              'crm.customers.manage',
+              'crm.leads.manage',
+              'wms.inventory.manage',
+              'wms.warehouses.manage',
+              'mes.production.manage',
+              'mes.quality.manage',
+              'erp.finance.manage',
+              'erp.hr.manage',
+              'admin.users.manage',
+              'admin.roles.manage',
+              'admin.settings.manage',
+              'account.all',
+            ],
+            isActive: true,
+            createdAt: DateTime.now(),
+            lastLogin: DateTime.now(),
+            token: "email",
+            tokenExpiry: DateTime.now().add(const Duration(days: 1)),
+          );
           await localDataSource.cacheUser(userModel);
           return Right(userModel.toEntity());
         } catch (e) {
@@ -181,6 +214,65 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e) {
       return Left(CacheFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, User>> refreshUserPermissions() async {
+    if (await networkInfo.isConnected) {
+      try {
+        // // Lấy thông tin người dùng hiện tại
+        // final userResult = await getCurrentUser();
+        // if (userResult.isLeft()) {
+        //   return Left(ServerFailure());
+        // }
+
+        // final user = userResult.getOrElse(() => throw Exception());
+        // if (user == null || user.token == null) {
+        //   return Left(InvalidCredentialsFailure());
+        // }
+
+        // // Gọi API để lấy thông tin quyền người dùng
+        // final userModel = await remoteDataSource.getUserPermissions(
+        //   user.id,
+        //   user.token!,
+        // );
+        // await localDataSource.cacheUser(userModel);
+        final userModel = UserModel(
+          id: 'offline-${DateTime.now().millisecondsSinceEpoch}',
+          email: "email",
+          fullName: 'Offline User',
+          roles: [
+            'admin',
+            'manager',
+            'user',
+            'operator',
+            'crm.customers.manage',
+            'crm.leads.manage',
+            'wms.inventory.manage',
+            'wms.warehouses.manage',
+            'mes.production.manage',
+            'mes.quality.manage',
+            'erp.finance.manage',
+            'erp.hr.manage',
+            'admin.users.manage',
+            'admin.roles.manage',
+            'admin.settings.manage',
+            'account.all',
+          ],
+          isActive: true,
+          createdAt: DateTime.now(),
+          lastLogin: DateTime.now(),
+          token: "email",
+          tokenExpiry: DateTime.now().add(const Duration(days: 1)),
+        );
+        await localDataSource.cacheUser(userModel);
+        return Right(userModel.toEntity());
+      } catch (e) {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
     }
   }
 

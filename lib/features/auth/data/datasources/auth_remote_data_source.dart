@@ -31,7 +31,10 @@ abstract class AuthRemoteDataSource {
   /// Làm mới token
   /// Throws [ServerException] nếu có lỗi từ server
   Future<UserModel> refreshToken(String token);
-}
+  
+  /// Lấy thông tin quyền của người dùng
+  /// Throws [ServerException] nếu có lỗi từ server
+  Future<UserModel> getUserPermissions(String userId, String token);}
 
 @Injectable(as: AuthRemoteDataSource)
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -172,6 +175,40 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // Tạo UserModel với token mới và thời gian hết hạn
       final userModel = UserModel.fromJson(userData);
       return userModel.copyWith(token: newToken, tokenExpiry: tokenExpiry);
+    } else {
+      throw ServerException();
+    }
+  }
+  
+  @override
+  Future<UserModel> getUserPermissions(String userId, String token) async {
+    // Gửi request GET đến endpoint lấy thông tin quyền người dùng
+    final response = await client.get(
+      Uri.parse('${ApiConstants.baseUrl}/users/$userId/permissions'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    // Kiểm tra kết quả trả về từ server
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      final userData = responseData['user']?? responseData;
+      
+      // Lấy thông tin người dùng hiện tại từ local storage
+      final currentUser = await localDataSource.getLastUser();
+      if (currentUser == null) {
+        throw CacheException();
+      }
+      
+      // Cập nhật thông tin quyền người dùng
+      final roles = responseData['roles'] != null 
+          ? List<String>.from(responseData['roles'])
+          : currentUser.roles;
+      
+      // Tạo UserModel với thông tin quyền mới
+      return currentUser.copyWith(roles: roles);
     } else {
       throw ServerException();
     }

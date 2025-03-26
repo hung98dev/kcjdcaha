@@ -28,6 +28,9 @@ abstract class AuthRepository {
   /// Làm mới token
   Future<Either<Failure, User>> refreshToken();
 
+  /// Làm mới thông tin quyền của người dùng
+  Future<Either<Failure, User>> refreshUserPermissions();
+
   /// Quên mật khẩu
   Future<Either<Failure, void>> forgotPassword(String email);
 

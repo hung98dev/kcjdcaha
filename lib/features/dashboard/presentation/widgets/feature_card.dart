@@ -206,4 +206,19 @@ class FeatureCard extends StatelessWidget {
       requireAnyPermission: true,
     );
   }
+
+  // Constructor cho module HRM (Quản lý nhân sự)
+  factory FeatureCard.hrm({VoidCallback? onTap, bool viewOnly = false}) {
+    return FeatureCard(
+      icon: Icons.people_alt_outlined,
+      title: 'HRM',
+      subtitle: 'Quản lý nhân sự',
+      onTap: onTap,
+      requiredPermissions:
+          viewOnly
+              ? [Permissions.viewHR]
+              : [Permissions.viewHR, Permissions.manageHR],
+      requireAnyPermission: true,
+    );
+  }
 }

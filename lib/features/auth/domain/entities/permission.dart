@@ -40,6 +40,7 @@ class Permissions {
   // ERP Permissions
   static const String viewFinance = 'erp.finance.read';
   static const String manageFinance = 'erp.finance.manage';
+  
   static const String viewHR = 'erp.hr.read';
   static const String manageHR = 'erp.hr.manage';
 
